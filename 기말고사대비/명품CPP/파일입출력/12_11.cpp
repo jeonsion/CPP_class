@@ -1,0 +1,134 @@
+//main.cpp
+
+#include <iostream>
+#include <time.h>
+#include <fstream>
+#include <vector>
+#include <cstring>
+#include <string>
+#include <string.h>
+#include <algorithm>
+#include "HangMan.h"
+#define MAX 30000
+using namespace std;
+
+int main(){
+    HangMan a("words.txt");
+    a.start();
+    
+   return  0;
+}
+//HangMan.h
+#pragma once
+#include <iostream>
+#include <time.h>
+#include <fstream>
+#include <vector>
+#include <cstring>
+#include <string>
+#include <string.h>
+#include <algorithm>
+#define MAX 30000
+using namespace std;
+
+class HangMan{
+    string filename;
+public:
+    HangMan(string filename){
+        this->filename = filename;
+    }
+    void start();
+};
+//HangMan.cpp
+#include "HangMan.h"
+#include <iostream>
+#define MAX 100
+using namespace std;
+
+void HangMan::start(){
+    cout << "-----------------------------" << endl;
+    cout << "지금부터 행맨게임을 시작합니다." << endl;
+    cout << "-----------------------------" << endl;
+    
+
+    ifstream file;
+    file.open("words.txt");
+    string text;
+    vector <string> v;
+    
+    while (getline(file,text)) {
+        v.push_back(text);
+    }
+    
+    srand((unsigned)time(0));
+    char ch[100];
+    
+    while (1) {
+        int n= rand()%25143;
+        string test_t = v[n];
+        int k2;
+        int k1 = rand()%(test_t.length()-1);
+        while (1) {
+            k2 = rand()%(test_t.length()-1);
+            if(k2 == k1) continue;
+            else break;
+        }
+        
+       
+        strcpy(ch,test_t.c_str());
+        ch[k1] = '-';
+        ch[k2] = '-';
+   
+        cout << ch;
+        int j=0;
+        while(1){
+            char ans;
+            cout << ">>";
+            cin >> ans;
+            if(j==4){
+                char yorn;
+                cout << "5번 실패했습니다." << endl;
+                cout << test_t << endl;
+                cout << "Next??(Y/N)";
+                cin >> yorn;
+                j=0;
+                if( yorn == 'y')
+                    break;
+                else if(yorn == 'n') exit(0);
+            }
+            
+            
+        
+            if(ans == test_t[k1]){
+                ch[k1] = test_t[k1];
+                j++;
+                cout << ch;
+            }
+            else if(ans == test_t[k2]){
+                ch[k2] = test_t[k2];
+                j++;
+                cout << ch;
+            }
+            else{
+                j++;
+                cout << ch;
+            }
+               
+            if(test_t == ch){
+                cout << endl;
+                char yorn;
+                j=0;
+                cout << "Next??(Y/N)";
+                cin >> yorn;
+                if( yorn == 'y')
+                    break;
+                else if(yorn == 'n') exit(0);
+            }
+            
+        }
+
+        
+
+    }
+    
+}
